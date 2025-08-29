@@ -1,20 +1,19 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
 
 app = Flask(__name__)
 CORS(app)
 
-# Your personal details
+# Your personal details - UPDATE THESE!
 USER_INFO = {
-    "user_id": "lazim-afraz",  # Change to your details
-    "email": "lazimafraz123@gmail.com",
-    "roll_number": "12"
+    "user_id": "lazim_afraz_17091999",  # Change to your actual details
+    "email": "lazim@example.com",
+    "roll_number": "ABCD123"
 }
 
 @app.route('/')
 def home():
-    return jsonify({"message": "BFHL API is running!", "status": "success"}), 200
+    return jsonify({"message": "BFHL API is running!"}), 200
 
 @app.route('/bfhl', methods=['POST'])
 def handle_post():
@@ -29,7 +28,6 @@ def handle_post():
         all_letters = []
         number_sum = 0
         
-        # Process each item
         for item in input_array:
             try:
                 num = int(item)
@@ -46,11 +44,9 @@ def handle_post():
                     elif not char.isalnum():
                         special_characters.append(char)
         
-        # Remove duplicates
         alphabets = list(dict.fromkeys(alphabets))
         special_characters = list(dict.fromkeys(special_characters))
         
-        # Create concat_string
         concat_string = ""
         if all_letters:
             reversed_letters = all_letters[::-1]
@@ -74,15 +70,12 @@ def handle_post():
         }), 200
         
     except Exception as e:
-        return jsonify({"is_success": False, "error": str(e)}), 400
+        return jsonify({"is_success": False}), 400
 
 @app.route('/bfhl', methods=['GET'])
 def handle_get():
     return jsonify({"operation_code": 1}), 200
 
-# This is CRUCIAL for Vercel
+# This is crucial for Vercel
 if __name__ == '__main__':
     app.run(debug=True)
-
-# Export the app for Vercel
-app = app

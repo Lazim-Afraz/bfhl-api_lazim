@@ -1,14 +1,20 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
 CORS(app)
 
+# Your personal details
 USER_INFO = {
-    "user_id": "lazim_afraz",  # your_name_ddmmyyyy (lowercase)
-    "email": "lazim0418@gmail.com",         # your email
-    "roll_number": "22BCT0265"        
+    "user_id": "lazim-afraz",  # Change to your details
+    "email": "lazimafraz123@gmail.com",
+    "roll_number": "12"
 }
+
+@app.route('/')
+def home():
+    return jsonify({"message": "BFHL API is running!", "status": "success"}), 200
 
 @app.route('/bfhl', methods=['POST'])
 def handle_post():
@@ -26,7 +32,6 @@ def handle_post():
         # Process each item
         for item in input_array:
             try:
-                # Try to convert to number
                 num = int(item)
                 number_sum += num
                 if num % 2 == 0:
@@ -34,7 +39,6 @@ def handle_post():
                 else:
                     odd_numbers.append(item)
             except:
-                # Not a number, check each character
                 for char in item:
                     if char.isalpha():
                         alphabets.append(char.upper())
@@ -42,11 +46,11 @@ def handle_post():
                     elif not char.isalnum():
                         special_characters.append(char)
         
-        # Remove duplicate alphabets
+        # Remove duplicates
         alphabets = list(dict.fromkeys(alphabets))
         special_characters = list(dict.fromkeys(special_characters))
         
-        # Create concat_string (reverse + alternating caps)
+        # Create concat_string
         concat_string = ""
         if all_letters:
             reversed_letters = all_letters[::-1]
@@ -69,12 +73,16 @@ def handle_post():
             "concat_string": concat_string
         }), 200
         
-    except:
-        return jsonify({"is_success": False}), 400
+    except Exception as e:
+        return jsonify({"is_success": False, "error": str(e)}), 400
 
 @app.route('/bfhl', methods=['GET'])
 def handle_get():
     return jsonify({"operation_code": 1}), 200
 
+# This is CRUCIAL for Vercel
 if __name__ == '__main__':
     app.run(debug=True)
+
+# Export the app for Vercel
+app = app

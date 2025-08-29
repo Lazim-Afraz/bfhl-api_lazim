@@ -86,3 +86,4 @@ if __name__ == '__main__':
 
 # Export the app for Vercel
 app = app
+
